@@ -25,7 +25,7 @@ SERVER.on('connection', function connection(client, req) {
       data = Buffer.from(data, 'base64').toString('utf-8');
       const { channel, payload } = JSON.parse(data);
       let { ws, ip, name } = CLIENT_MAP[client.id]
-      console.log(`<<<<< [${channel}] [${ws.id}_${ip}_${name}]`)
+      console.log(`\n\n<---- [${channel}] [${ws.id}_${ip}_${name}]`)
       switch(channel){
         case "register": 
           console.log("Registering client: ", payload)
@@ -37,8 +37,23 @@ SERVER.on('connection', function connection(client, req) {
         case "publish":
           publishMessage("publish", payload)
           break;
-        case "report":
-          console.log(`[${ws.id}] - ${payload}`);
+
+        // --- "Microservice" channels
+        case "verseOne":
+          sing(payload)
+          publishMessage("verseTwo", payload)
+          break;
+        case "verseTwo":
+          sing(payload)
+          publishMessage("verseThree", payload)
+          break;
+        case "verseThree":
+          sing(payload)
+          publishMessage("verseFour", payload)
+          break;
+        case "verseFour":
+          sing(payload)
+          publishMessage("verseFive", payload)
           break;
       }
     }catch(err){
@@ -57,7 +72,11 @@ SERVER.on('connection', function connection(client, req) {
 const publishMessage = (channel = "publish", payload)=> {
   Object.keys(CLIENT_MAP).map(id=>{
     const { ws, ip, name } = CLIENT_MAP[id]
-    console.log(`>>>>> [${channel}] [${ws.id}_${ip}_${name}]`)
+    console.log(`----> [${channel}] [${ws.id}_${ip}_${name}]`)
     ws.send(JSON.stringify({channel, payload}));
   })
+}
+
+function sing(lyrics){
+  console.log(`\n 🎶 ${lyrics} 🎶\n`)
 }

@@ -1,9 +1,11 @@
 import WebSocket from 'ws';
 import readlineSync from 'readline-sync';
+import env from 'dotenv';
+env.config();
 
 // --- CONFIG
-let SERVER_IP
-let CLIENT_NAME
+let SERVER_IP = process.env.SERVER_IP;
+let CLIENT_NAME = process.env.CLIENT_NAME;
 
 while (true) {
   if(!SERVER_IP){
@@ -24,16 +26,18 @@ while (true) {
       ws.on('message', data => {
         data = Buffer.from(data, 'base64').toString('utf-8');
         const { channel, payload } = JSON.parse(data);
-        console.log(`<<<<< [${channel}] - ${payload}`);
+        console.log(`<---- [${channel}] - ${payload}`);
         // channel: event you're listening to
         // payload: data that comes with the event
 
         // Sample "Microservice" for Ping Channel
         if(channel === "ping"){
-          
+          console.log(`----> [pong]`);
+          ws.send(JSON.stringify({channel:"pong", payload: CLIENT_NAME}))
         }
 
         // Add more "Microservices"
+
 
       });
 
