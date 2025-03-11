@@ -1,0 +1,19 @@
+{
+  "name": "eda-demo",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "server": "node src/server.js",
+    "client": "node src/client.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "type": "module",
+  "dependencies": {
+    "readline-sync": "^1.4.10",
+    "ws": "^8.18.1"
+  }
+}
